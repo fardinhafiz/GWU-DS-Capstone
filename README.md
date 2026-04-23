@@ -37,3 +37,38 @@ FastAPI- Handles all the models and connects the frontend and the backend.
 
 Frontend-
 React - Allows for a visually appealing and reactive interface for the backend.
+
+## Steps to Launch 
+Step 1 - Download all of the source files and make sure to check all of the packages are the correct version using the requirements.txt file.
+
+Step 2 - Navigate to the file in a terminal and then do the following commands to run the backend of the project first 
+
+cd backend
+
+python3 -m venv .venv
+
+source .venv/bin/activate
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
+
+Step 3 - Open a seperate terminal and navigate to the main project folder in order to then run the frontend using the following commands.
+
+cd frontend
+
+npm install
+
+npm run dev
+
+This should provide you with a link that looks like localhost. Click it to start 
+
+Step 4 - In the application input a unique username to get personalized results. 
+
+Step 5 - To ensure the XGBoost is working properly, do the following:
+
+Use the app and like/dislike items
+
+Go to http://127.0.0.1:8000/docs
+
+Run POST /train-xgb
