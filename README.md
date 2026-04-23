@@ -1,75 +1,105 @@
-# GWU-DS-Capstone
-Curate - Personal Style Application
+# AI Fashion Curator Upgrade
 
-## Problem
-Online Shopping takes a lot of time and effort sifting through different websites.
-Finding exactly what you are looking for is based on what websites your search engine shows you.
-For more specific searches, it is harder to find exactly what you are looking for.
-Online shopping doesn't offer the same personalized touch as in person.
+This package upgrades the original Streamlit prototype into a React + FastAPI project with:
 
-## Solution
-An AI based shopping assistant that learns from the user.
-Help the user determine intention and make it easier to find exactly what they are looking for.
-Different then standard search engines as they only search with input text, but this gets personalized with a person over time.
-Standard search engine also only show popular brands or sponsored brands while this allows for smaller reputable brands to be shown if it matches.
-Helps users by find clothes exactly to their wishes and retailers by lowering return rate of clothes.
-Offers a ‘For you’ section that recommends clothes based on specific taste of the user.
+- semantic NLP search using Sentence-BERT
+- fashion synonym normalization such as hoodie -> sweatshirt and trainers -> sneakers
+- multimodal style profiling with uploaded inspiration images using CLIP
+- persistent user profiles and interactions in SQLite
+- model comparison and selection across multiple classifiers
+- a more polished React frontend
 
-## Tech Stack
-User Profile-
-Allows the user to select their personal preferences to better allow the algorithm to understand.
-Like/Dislike Feedback loop allows the user to like or dislike the recommendations, so the model can learn their taste. 
-Photo Upload using PILLOW package - Allows the user to upload a picture, and the algorithm gains insights.
+## Project structure
 
-Search Function - 
-NLP Model - Implements a Semantic BERT model to understand the meaning of the user.
-Manual scoring mechanism that shows results based on the user's preferences. 
-Cosine Similarity to show the results of the search. 
+```text
+fashion_curator_upgrade/
+├── backend/
+│   ├── app/
+│   ├── data/
+│   │   └── styles.csv
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── vite.config.js
+└── README.md
+```
 
-For You Section-
-XGBoost Machine Learning model- Uses a Machine Learning model based on all of the user feedback and user preferences to show clothes the user might like.
-Falls back to the manual scoring methodology if the XGBoost model is not fully trained. 
+## Backend setup
 
-Backend -
-SQLite - Used to store user data to make sure each person’s profile data is stored and they can come back to the application to pick up where they left off. 
-FastAPI- Handles all the models and connects the frontend and the backend.
+From the `backend` folder:
 
-Frontend-
-React - Allows for a visually appealing and reactive interface for the backend.
-
-## Steps to Launch 
-Step 1 - Download all of the source files and make sure to check all of the packages are the correct version using the requirements.txt file.
-
-Step 2 - Navigate to the file in a terminal and then do the following commands to run the backend of the project first 
-
-cd backend
-
+```bash
 python3 -m venv .venv
-
 source .venv/bin/activate
-
 pip install -r requirements.txt
-
 uvicorn app.main:app --reload
+```
 
-Step 3 - Open a seperate terminal and navigate to the main project folder in order to then run the frontend using the following commands.
+The API runs at:
 
-cd frontend
+```text
+http://localhost:8000
+```
 
+## Frontend setup
+
+From the `frontend` folder:
+
+```bash
 npm install
-
 npm run dev
+```
 
-This should provide you with a link that looks like localhost. Click it to start 
+The React app runs at:
 
-Step 4 - In the application input a unique username to get personalized results. 
+```text
+http://localhost:5173
+```
 
-Step 5 - To ensure the XGBoost is working properly, do the following:
+## Notes
 
-Use the app and like/dislike items
+Place your catalog product images inside:
 
-Go to http://127.0.0.1:8000/docs
+```text
+backend/images/
+```
 
-Run POST /train-xgb
+and name them by item id, for example:
 
+```text
+1163.jpg
+1164.png
+```
 
+The uploaded style images are stored in:
+
+```text
+backend/data/user_uploads/
+```
+
+## Model training
+
+The app compares these models once you have enough feedback data:
+
+- Logistic Regression
+- Random Forest
+- HistGradientBoostingClassifier
+- MLPClassifier
+
+Use the UI button or call:
+
+```text
+POST /train-models
+```
+
+If there is not enough data yet, the app falls back to the hybrid semantic scoring system.
+
+## What changed from the original prototype
+
+- TF-IDF search was replaced with semantic sentence embeddings
+- synonym normalization was added for fashion vernacular
+- a trainable model-selection layer was added
+- image upload is now part of the user profile
+- recommendations use text, profile, image, and interaction signals together
+- the frontend is now React instead of Streamlit
