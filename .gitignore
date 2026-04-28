@@ -1,21 +1,15 @@
-# Python
 .venv/
 __pycache__/
 *.pyc
 
-# Node
 node_modules/
 
-# Mac
 .DS_Store
 
-# Database
 fashion_ai.db
 
-# Images (too large for GitHub)
 backend/images/
 
-# Uploaded images
 backend/style_uploads/
 
 backend/data/user_uploads/ 
